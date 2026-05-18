@@ -29,10 +29,38 @@ Reasoning:
 I created a base class vehicle and inherited Car, Bike, and Truck classes from it. This avoids code duplication and makes the system easier to manage and extend in the future.
 Similarly, different types of users on the platform such as Buyer, Seller, and Admin all share common information like name, email, and userID. Therefore, these classes inherit from the User class. This follows the real-world structure of an online marketplace system.
 
+Code snippits:
+
+class Car : public vehicle
+{
+private:
+    int doorsNum;
+    string bodyType;
+};
+
+class Buyer : public User
+{
+private:
+    string favourites[10];
+    int count;
+};
+
+
 Section 7: Polymorphism:
 Reasoning:
 I used polymorphism so that the same function can behave differently for different objects.
 For example, the displayDetails() function is declared as virtual in the vehicle class and overridden in the Car, Bike, and Truck classes. This allows the system to display different details depending on the actual vehicle type while using a single base class pointer.
+
+Code snippits:
+
+virtual void displayDetails() = 0;
+
+void displayDetails() override
+{
+    cout << "--- Car Details ---" << endl;
+    display();
+    cout << "Doors: " << doorsNum << endl;
+}
 
 
 Section 8: Abstract Clases:
@@ -40,12 +68,34 @@ Reasongin:
 I made the vehicle and User classes partially abstract by using pure virtual functions such as displayDetails() and displayProfile().
 The system should only create specific objects like Cars, Bikes, Buyers, or Sellers.
 
+Code snippits:
+
+virtual void displayDetails() = 0;
+virtual void displayProfile() = 0;
+
+
 Section 9: Operator Overloading:
 Reasoning:
 I overloaded the == operator in the vehicle class to compare prices of two vehicles directly. (Comparing 2 listing on pakwheels)
 I also overloaded the + operator to combine prices of two vehicles or two payments
 
+Code snippits:
+
+bool operator==(const vehicle &v) const
+{
+    return price == v.price;
+}
+
+float operator+(const Payment &p) const
+{
+    return amount + p.amount;
+}
+
+
 Section 10: Friend Functions:
 Reasoning:
 I used friend functions when an external function needed direct access to private or protected data members of a class.
 For example, the compareCarDetails() function compares the number of doors between two car objects, while checkAffordability() checks whether a buyer’s budget is enough for a vehicle.
+
+friend void compareCarDetails(Car &c1, Car &c2);
+friend void checkAffordability(Buyer &b, vehicle &v);
